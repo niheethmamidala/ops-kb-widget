@@ -2,141 +2,280 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ops KB Assistant</title>
-<script src="https://live.zwidgets.com/js-sdk/1.0.5/ZohoEmbededAppSDK.min.js"></script>
+<script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: Calibri, sans-serif; }
-body { background: #f5f5f5; padding: 20px; }
-.header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 16px; background: #060644; border-radius: 10px; }
-.logo { width: 40px; height: 40px; background: #EEBA2B; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #060644; font-size: 14px; }
-.header h1 { color: #fff; font-size: 18px; font-weight: 600; }
-.header p { color: #EEBA2B; font-size: 12px; }
-.search-section { background: white; border-radius: 10px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.search-row { display: flex; gap: 10px; margin-bottom: 12px; }
-textarea { flex: 1; padding: 10px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; resize: none; height: 60px; outline: none; font-family: Calibri, sans-serif; }
-textarea:focus { border-color: #060644; }
-.search-btn { background: #060644; color: #EEBA2B; border: none; border-radius: 8px; padding: 0 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
-.search-btn:disabled { opacity: 0.5; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #f9f9f9; color: #555; cursor: pointer; }
-.chip:hover { border-color: #060644; color: #060644; }
-.answer-section { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 200px; }
-.answer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.answer-label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
-.copy-btn { background: #f0f0f0; border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
-.answer-text { font-size: 14px; line-height: 1.8; color: #333; white-space: pre-wrap; }
-.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 150px; color: #aaa; font-size: 14px; gap: 10px; }
-.loading-state { display: flex; align-items: center; gap: 12px; color: #666; font-size: 14px; padding: 20px 0; }
-.spinner { width: 20px; height: 20px; border: 2px solid #eee; border-top-color: #060644; border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.disclaimer { font-size: 11px; color: #aaa; margin-top: 16px; padding-top: 12px; border-top: 1px solid #f0f0f0; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f7f8fb;
+    color: #1c1f2b;
+  }
+  .header {
+    background: #12143d;
+    color: #fff;
+    padding: 14px 18px;
+    border-radius: 8px 8px 0 0;
+  }
+  .header .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: #d4a017;
+    color: #12143d;
+    font-weight: 700;
+    border-radius: 6px;
+    margin-right: 10px;
+    font-size: 13px;
+  }
+  .header-row { display: flex; align-items: center; }
+  .header-title { font-size: 15px; font-weight: 600; }
+  .header-sub { font-size: 11px; color: #c7c9e6; margin-top: 2px; }
+  .body-wrap { background: #fff; border: 1px solid #e5e7f0; border-top: none; border-radius: 0 0 8px 8px; padding: 14px 16px 18px; }
+  textarea {
+    width: 100%;
+    min-height: 54px;
+    resize: vertical;
+    border: 1px solid #d7d9e6;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  .submit-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+  button#askBtn {
+    background: #12143d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button#askBtn:disabled { opacity: 0.6; cursor: default; }
+  .chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    background: #f0f1fa;
+    border: 1px solid #e0e2f2;
+    color: #33365a;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .chip:hover { background: #e5e7f8; }
+  .answer-block { margin-top: 16px; }
+  .answer-label { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #8a8da8; text-transform: uppercase; margin-bottom: 6px; }
+  .answer-text { font-size: 13.5px; line-height: 1.55; white-space: pre-wrap; min-height: 20px; }
+  .disclaimer { font-size: 10.5px; color: #9497b3; margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; }
+  .copy-btn {
+    display: none;
+    margin-top: 10px;
+    background: none;
+    border: 1px solid #d7d9e6;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    cursor: pointer;
+    color: #33365a;
+  }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid #d7d9e6;
+    border-top-color: #12143d;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .err { color: #c0392b; }
 </style>
 </head>
 <body>
+
 <div class="header">
-  <div class="logo">GC</div>
-  <div>
-    <h1>Ops KB Assistant</h1>
-    <p>SEBI RIA INA200005380 · Instant answers for client queries</p>
-  </div>
-</div>
-<div class="search-section">
-  <div class="search-row">
-    <textarea id="queryInput" placeholder="e.g. Client wants to update nominee after father's death. What documents needed?"></textarea>
-    <button class="search-btn" id="searchBtn" onclick="askQuery()">Get Answer</button>
-  </div>
-  <div class="chips">
-    <span class="chip" onclick="setQuery('Client wants to update nominee in mutual fund folio')">Nominee update</span>
-    <span class="chip" onclick="setQuery('Client KYC showing invalid or rejected on portal')">KYC invalid</span>
-    <span class="chip" onclick="setQuery('How to change bank account and mandate across all folios')">Bank mandate</span>
-    <span class="chip" onclick="setQuery('NRI client wants to start investing in mutual funds')">NRI onboarding</span>
-    <span class="chip" onclick="setQuery('Client wants to change registered mobile number and email')">Contact update</span>
-    <span class="chip" onclick="setQuery('Transmission of units after investor passed away')">Transmission</span>
-    <span class="chip" onclick="setQuery('Client folio not showing on Investwell portal')">Investwell issue</span>
-    <span class="chip" onclick="setQuery('How to do video KYC for new client')">Video KYC</span>
-    <span class="chip" onclick="setQuery('Client wants to invest in bonds')">Bond investment</span>
-    <span class="chip" onclick="setQuery('How to download consolidated account statement')">CAS download</span>
-  </div>
-</div>
-<div class="answer-section">
-  <div class="answer-header">
-    <span class="answer-label">Answer</span>
-    <button class="copy-btn" id="copyBtn" onclick="copyAnswer()" style="display:none">Copy</button>
-  </div>
-  <div id="answerBox">
-    <div class="empty-state">
-      <span style="font-size:32px;">&#128269;</span>
-      <span>Type a client query above or pick a common one</span>
+  <div class="header-row">
+    <div class="badge">GC</div>
+    <div>
+      <div class="header-title">Ops KB Assistant</div>
+      <div class="header-sub">SEBI RIA Reg. INA200005380 &middot; Instant answers for client queries</div>
     </div>
   </div>
 </div>
 
+<div class="body-wrap">
+  <textarea id="query" placeholder="e.g. Client wants to update nominee after father's death. What documents needed?"></textarea>
+
+  <div class="submit-row">
+    <button id="askBtn" onclick="askKB()">Ask</button>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div class="answer-block" id="answerBlock" style="display:none;">
+    <div class="answer-label">Answer</div>
+    <div class="answer-text" id="answerText"></div>
+    <button class="copy-btn" id="copyBtn" onclick="copyAnswer()">Copy answer</button>
+  </div>
+
+  <div class="disclaimer">SEBI RIA Reg. INA200005380 &middot; PMS Reg. INP000006563 &middot; Always verify with ops team before communicating to client</div>
+</div>
+
 <script>
-var API_KEY = "";
+var CHIP_LABELS = ["Nominee update","KYC invalid","Bank mandate","NRI onboarding","Contact update","Transmission","Investwell issue","Video KYC","Bond investment","CAS download"];
 
-ZOHO.embeddedApp.on("PageLoad", function(data) {
-  ZOHO.CRM.API.getVariable("ANTHROPIC_API_KEY").then(function(result) {
-    if (result && result.variables && result.variables.length > 0) {
-      API_KEY = result.variables[0].value;
-    }
-  }).catch(function(err) {
-    console.error("Variable fetch error:", err);
+var chipsEl = document.getElementById('chips');
+CHIP_LABELS.forEach(function(label){
+  var c = document.createElement('div');
+  c.className = 'chip';
+  c.textContent = label;
+  c.onclick = function(){ document.getElementById('query').value = label + ' - '; document.getElementById('query').focus(); };
+  chipsEl.appendChild(c);
+});
+
+// -----------------------------------------------------------------
+// SYSTEM PROMPT / KB CONTENT
+// KB content is bundled as kb_content.txt alongside this widget.html in
+// the same zip, and loaded once at startup. Full 5-category ops KB
+// (Mutual Fund Folio Management, NRI Investor Queries, Bond Investment
+// Queries, KYC & Compliance, Investwell Mint Software & Video Guides).
+// Note: this is the TEXT of the KB only — the 160+ embedded screenshots
+// in the source document are not yet described/captioned for the model,
+// so answers reference steps/fields by name but can't "see" the images.
+// -----------------------------------------------------------------
+var PREAMBLE = "You are the Ops KB Assistant for Guardian Capital Investment Advisors (GCIA), a SEBI-registered investment advisor (Reg. INA200005380). Answer ops queries from business team members strictly using the knowledge base below. If the answer is not in the KB, say so plainly and recommend checking with the ops team directly. Be concise and step-by-step where relevant. Do not invent SRN numbers, timelines, or steps not present in the KB.\n\n--- KNOWLEDGE BASE ---\n";
+
+var KB_CONTENT = ""; // loaded from kb_content.txt at init
+var ANTHROPIC_API_KEY = ""; // filled in from Zoho Variable at init
+
+function initWidget(){
+  ZOHO.embeddedApp.on("PageLoad", function(){
+    ZOHO.CRM.CONNECTION.invokeUrl
+      ? fetchKeyViaConnection()
+      : fetchKeyViaVariable();
+    loadKBContent();
   });
-});
+  ZOHO.embeddedApp.init();
+}
 
-ZOHO.embeddedApp.init();
+function loadKBContent(){
+  fetch('./kb_content.txt')
+    .then(function(res){ return res.text(); })
+    .then(function(text){ KB_CONTENT = text; })
+    .catch(function(err){ console.error("KB content load error:", err); });
+}
 
-document.getElementById('queryInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); askQuery(); }
-});
-
-function setQuery(t) { document.getElementById('queryInput').value = t; askQuery(); }
-
-function copyAnswer() {
-  navigator.clipboard.writeText(document.getElementById('answerBox').innerText).then(function() {
-    document.getElementById('copyBtn').innerText = 'Copied!';
-    setTimeout(function(){ document.getElementById('copyBtn').innerText = 'Copy'; }, 2000);
+function fetchKeyViaVariable(){
+  ZOHO.CRM.API.getOrgVariable("ANTHROPIC_API_KEY").then(function(data){
+    if (data && data.Success && data.Success.Content) {
+      ANTHROPIC_API_KEY = data.Success.Content;
+    } else {
+      console.error("Could not read ANTHROPIC_API_KEY variable:", data);
+    }
+  }).catch(function(err){
+    console.error("Variable fetch error:", err);
   });
 }
 
-async function askQuery() {
-  var query = document.getElementById('queryInput').value.trim();
-  if (!query) return;
-  var box = document.getElementById('answerBox');
-  var btn = document.getElementById('searchBtn');
-  btn.disabled = true;
-  document.getElementById('copyBtn').style.display = 'none';
-  box.innerHTML = '<div class="loading-state"><div class="spinner"></div><span>Searching knowledge base...</span></div>';
+function fetchKeyViaConnection(){
+  // Fallback path if org variable API isn't available in this SDK version
+  fetchKeyViaVariable();
+}
 
-  var system = "You are an internal operations assistant for Guardian Capital Investment Advisors (GCIA), a SEBI-registered investment advisory firm in Hyderabad (SEBI RIA Reg. INA200005380). Help the business development and sales team answer client queries about mutual fund operations, KYC, NRI investments, bonds, and platform issues. Rules: Give specific actionable answers with exact steps where possible. Plain text only, no asterisks, no hash symbols, no markdown formatting. Keep answers under 200 words. For MF operations mention MF Central (mfcentral.com). For KYC issues mention KRA and CKYC. For NRI clients clarify NRE vs NRO. Mention realistic timelines. End every answer with: Verify specific folio details with ops team before communicating to client. Never recommend specific funds.";
+async function askKB(){
+  var query = document.getElementById('query').value.trim();
+  if (!query) return;
+
+  var btn = document.getElementById('askBtn');
+  var answerBlock = document.getElementById('answerBlock');
+  var answerText = document.getElementById('answerText');
+  var copyBtn = document.getElementById('copyBtn');
+
+  btn.disabled = true;
+  answerBlock.style.display = 'block';
+  copyBtn.style.display = 'none';
+  answerText.innerHTML = '<span class="spinner"></span>';
+
+  if (!ANTHROPIC_API_KEY) {
+    answerText.innerHTML = '<span class="err">API key not loaded from Zoho Variables. Check Developer Hub &gt; Variables &gt; ANTHROPIC_API_KEY.</span>';
+    btn.disabled = false;
+    return;
+  }
+
+  if (!KB_CONTENT) {
+    answerText.innerHTML = '<span class="err">Knowledge base still loading. Please wait a moment and try again.</span>';
+    btn.disabled = false;
+    return;
+  }
 
   try {
-    var r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
+    var response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        "Content-Type": "application/json",
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 500,
-        system: system,
-        messages: [{ role: 'user', content: query }]
+        model: "claude-haiku-4-5",
+        max_tokens: 1000,
+        system: [
+          {
+            type: "text",
+            text: PREAMBLE + KB_CONTENT,
+            cache_control: { type: "ephemeral" }
+          }
+        ],
+        messages: [{ role: "user", content: query }]
       })
     });
-    var d = await r.json();
-    var answer = d && d.content && d.content[0] ? d.content[0].text : 'Please check with ops team directly.';
-    box.innerHTML = '<div class="answer-text" id="atext"></div><div class="disclaimer">Always verify with ops team before communicating to client</div>';
-    document.getElementById('copyBtn').style.display = 'block';
-    var el = document.getElementById('atext'), i = 0;
-    var iv = setInterval(function(){ el.textContent = answer.slice(0,i); i+=4; if(i>answer.length){el.textContent=answer;clearInterval(iv);} }, 8);
-  } catch(e) {
-    box.innerHTML = '<div class="answer-text" style="color:red">Could not connect. Please try again.</div>';
+
+    if (!response.ok) {
+      var errBody = await response.text();
+      console.error("Anthropic API error:", response.status, errBody);
+      answerText.innerHTML = '<span class="err">Request failed (status ' + response.status + '). Check console for details.</span>';
+      btn.disabled = false;
+      return;
+    }
+
+    var data = await response.json();
+    var answer = (data.content && data.content[0] && data.content[0].text) || 'No answer found. Please check with ops team directly.';
+
+    answerText.textContent = '';
+    copyBtn.style.display = 'inline-block';
+    copyBtn.dataset.answer = answer;
+
+    var i = 0;
+    var interval = setInterval(function(){
+      answerText.textContent = answer.slice(0, i);
+      i += 4;
+      if (i > answer.length) { answerText.textContent = answer; clearInterval(interval); }
+    }, 8);
+
+  } catch (err) {
+    console.error("Fetch error:", err);
+    answerText.innerHTML = '<span class="err">Could not connect. Please try again or check with ops team directly.</span>';
   }
+
   btn.disabled = false;
+}
+
+function copyAnswer(){
+  var copyBtn = document.getElementById('copyBtn');
+  var text = copyBtn.dataset.answer || '';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+    copyBtn.textContent = 'Copied!';
+    setTimeout(function(){ copyBtn.textContent = 'Copy answer'; }, 1500);
+  }
+}
+
+if (typeof ZOHO !== 'undefined') {
+  initWidget();
 }
 </script>
 </body>
